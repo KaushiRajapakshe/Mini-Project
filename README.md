@@ -1,4 +1,4 @@
 # Mini-Project
 
-### Developer by
+### Developed by
     Kaushalya Rajapakshe
