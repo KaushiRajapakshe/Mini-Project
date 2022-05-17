@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/payment")
+@CrossOrigin()
 public class PaymentController {
     @Autowired
     private final PaymentService paymentService;

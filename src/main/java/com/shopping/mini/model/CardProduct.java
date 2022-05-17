@@ -11,9 +11,14 @@ import lombok.Setter;
 public class CardProduct {
     private int cartId;
     private int productId;
+    private String productName;
     private int productCount;
+    private String productInfo;
     private double productTotalPrice;
+    private double productPrice;
     private boolean active;
+    private String imgURL;
+    private double availableCount;
 
     public boolean getActive() {
         return this.active;

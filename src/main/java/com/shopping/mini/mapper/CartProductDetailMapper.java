@@ -7,9 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Created by @author Kaushalya Rajapakshe on 2022-04-11
+ * Created by @author Kaushalya Rajapakshe on 2022-04-30
  */
-public class CardProductMapper implements RowMapper<CardProduct> {
+public class CartProductDetailMapper implements RowMapper<CardProduct> {
     @Override
     public CardProduct mapRow(ResultSet rs, int rowNum) throws SQLException {
         CardProduct cardProduct = new CardProduct();
@@ -22,6 +22,8 @@ public class CardProductMapper implements RowMapper<CardProduct> {
         cardProduct.setProductTotalPrice(rs.getDouble("product_total_price"));
         cardProduct.setActive(rs.getBoolean("active"));
         cardProduct.setImgURL(rs.getString("imgURL"));
+        cardProduct.setProductPrice(rs.getDouble("product_price"));
+        cardProduct.setAvailableCount(rs.getDouble("available_count"));
         return cardProduct;
     }
 }

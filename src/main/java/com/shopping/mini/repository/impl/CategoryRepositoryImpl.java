@@ -39,13 +39,14 @@ public class CategoryRepositoryImpl implements CategoryRepository {
         List<Category> categoryList = jdbcTemplate.query(sqlCheck, new BeanPropertyRowMapper<>(Category.class));
         if (categoryList.isEmpty()) {
             KeyHolder keyHolder = new GeneratedKeyHolder();
-            String sql = "INSERT INTO " + CATEGORY_TABLE + " ( `category_name`, `active`, `updated_date` )" +
-                    " VALUES (?, ?, ?)";
+            String sql = "INSERT INTO " + CATEGORY_TABLE + " ( `category_name`, `active`, `updated_date`, `imgURL`)" +
+                    " VALUES (?, ?, ?, ?)";
             jdbcTemplate.update(con -> {
                 PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, category.getCategoryName());
                 ps.setBoolean(2, category.getActive());
                 ps.setTimestamp(3, category.getUpdatedDate());
+                ps.setString(4, category.getImgURL());
                 return ps;
             }, keyHolder);
             category.setCategoryId(keyHolder.getKey().intValue());
@@ -63,6 +64,7 @@ public class CategoryRepositoryImpl implements CategoryRepository {
         String sql = "UPDATE " + CATEGORY_TABLE + " SET category_name = '" + category.getCategoryName() + "', " +
                 " active = " + category.getActive() + ", " +
                 " updated_date = '" + category.getUpdatedDate() + "' " +
+                " imgURL = '" + category.getImgURL() + "'" +
                 " WHERE category_id = " + category.getCategoryId() + "";
         if(categoryList.isEmpty()) {
             jdbcTemplate.update(sql);

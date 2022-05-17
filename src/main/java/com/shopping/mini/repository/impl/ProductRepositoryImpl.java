@@ -1,5 +1,6 @@
 package com.shopping.mini.repository.impl;
 
+import com.shopping.mini.mapper.ProductMapper;
 import com.shopping.mini.model.Category;
 import com.shopping.mini.model.Product;
 import com.shopping.mini.repository.CategoryRepository;
@@ -8,7 +9,9 @@ import com.shopping.mini.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Service;
@@ -16,7 +19,6 @@ import org.springframework.stereotype.Service;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 import static com.shopping.mini.util.constants.Constant.PRODUCT_TABLE;
@@ -50,7 +52,7 @@ public class ProductRepositoryImpl implements ProductRepository {
             KeyHolder keyHolder = new GeneratedKeyHolder();
             String sql = "INSERT INTO " + PRODUCT_TABLE + " ( `category_id`, `product_name`, `product_info_detail`," +
                     "`product_info_count`, `product_count`, " +
-                    "`product_price`, `active`, `updated_date` ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                    "`product_price`, `active`, `updated_date`, `imgURL` ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             jdbcTemplate.update(con -> {
                 PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
                 ps.setInt(1, product.getCategoryId());
@@ -61,6 +63,7 @@ public class ProductRepositoryImpl implements ProductRepository {
                 ps.setDouble(6, product.getProductPrice());
                 ps.setBoolean(7, product.getActive());
                 ps.setTimestamp(8, product.getUpdatedDate());
+                ps.setString(9, product.getImgURL());
                 return ps;
             }, keyHolder);
             product.setProductId(keyHolder.getKey().intValue());
@@ -81,7 +84,8 @@ public class ProductRepositoryImpl implements ProductRepository {
                 " product_count = '" + product.getProductCount() + "', " +
                 " product_price = '" + product.getProductPrice() + "', " +
                 " active = " + product.getActive() + ", " +
-                " updated_date = '" + product.getUpdatedDate() + "' " +
+                " updated_date = '" + product.getUpdatedDate() + "', " +
+                " imgURL = '" + product.getImgURL() + "'" +
                 " WHERE product_id = " + product.getProductId() + "";
 
         if (productsList.isEmpty()) {
@@ -108,9 +112,9 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     public List<Product> getProductByName(String name) {
-        String sql = "SELECT * FROM " + PRODUCT_TABLE + " WHERE category_id = (SELECT category_id FROM " +
-                PRODUCT_TABLE + " WHERE product_name = '" + name + "');";
-        List<Product> product = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Product.class));
+        SqlParameterSource namedParameters = new MapSqlParameterSource().addValue("product_name", name);
+        List<Product> product = ops.query("" + "SELECT * FROM product WHERE category_id = (SELECT category_id FROM " +
+                "product WHERE product_name = :product_name) ", namedParameters, new ProductMapper());
         if (product.isEmpty())
             return Collections.emptyList();
         else

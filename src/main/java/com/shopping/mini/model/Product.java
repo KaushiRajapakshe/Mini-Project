@@ -20,6 +20,7 @@ public class Product {
     private Timestamp addedDate;
     private Timestamp updatedDate;
     private boolean active;
+    private String imgURL;
 
     public boolean getActive() {
         return this.active;

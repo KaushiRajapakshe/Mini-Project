@@ -1,6 +1,6 @@
 package com.shopping.mini.repository.impl;
 
-import com.shopping.mini.mapper.CardProductMapper;
+import com.shopping.mini.mapper.CartProductDetailMapper;
 import com.shopping.mini.model.CardProduct;
 import com.shopping.mini.model.Cart;
 import com.shopping.mini.repository.CartRepository;
@@ -67,22 +67,27 @@ public class CardRepositoryImpl implements CartRepository {
                     + cart.getCartId() + " AND product_id = " + cardProduct.getProductId() + "";
             List<CardProduct> cardProductExist = jdbcTemplate.query(getCartProductSql, new BeanPropertyRowMapper<>(CardProduct.class));
             if(cardProductExist.isEmpty()) {
-                String cartProductInsertSql = "INSERT INTO "+ CART_PRODUCT_TABLE + " ( `cart_id`, `product_id`, " +
-                        "`product_count`, `product_total_price`, `active` ) VALUES (?, ?, ?, ?, ?)";
+                String cartProductInsertSql = "INSERT INTO "+ CART_PRODUCT_TABLE + " ( `cart_id`," +
+                        "`product_id`, `product_name`, `product_count`, `product_info`, `product_total_price`, `active`, " +
+                        "`imgURL`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
                 result = jdbcTemplate.update(con -> {
                     PreparedStatement ps = con.prepareStatement(cartProductInsertSql, Statement.RETURN_GENERATED_KEYS);
                     ps.setInt(1, cart.getCartId());
                     ps.setInt(2, cardProduct.getProductId());
-                    ps.setInt(3, cardProduct.getProductCount());
-                    ps.setDouble(4, cardProduct.getProductTotalPrice());
-                    ps.setBoolean(5, cardProduct.getActive());
+                    ps.setString(3, cardProduct.getProductName());
+                    ps.setInt(4, cardProduct.getProductCount());
+                    ps.setString(5, cardProduct.getProductInfo());
+                    ps.setDouble(6, cardProduct.getProductTotalPrice());
+                    ps.setBoolean(7, cardProduct.getActive());
+                    ps.setString(8, cardProduct.getImgURL());
                     return ps;
                 });
             } else if (cardProductExist.get(0).getProductId() >= 1 && cardProductExist.get(0).getCartId() >= 1) {
                 String cartProductUpdateSql = "UPDATE " + CART_PRODUCT_TABLE +
                         " SET product_count = " + cardProduct.getProductCount() + ", " +
                         " product_total_price = " + cardProduct.getProductTotalPrice() + ", " +
-                        " active = " + cardProduct.getActive() + " " +
+                        " active = " + cardProduct.getActive() + ", " +
+                        " imgURL = '" + cardProduct.getImgURL() + "' " +
                         " WHERE cart_id = " + cart.getCartId() +
                         " AND product_id = " + cardProduct.getProductId() + "";
                 result = jdbcTemplate.update(cartProductUpdateSql);
@@ -98,8 +103,10 @@ public class CardRepositoryImpl implements CartRepository {
     @Override
     public Cart getCartById(int id) {
         SqlParameterSource namedParameters = new MapSqlParameterSource().addValue("cart_id", id);
-        List<CardProduct> cart = ops.query("" + "SELECT * FROM cart c, cart_product p WHERE c.cart_id = :cart_id " +
-                        "AND p.cart_id = :cart_id", namedParameters, new CardProductMapper());
+        List<CardProduct> cart = ops.query("" + "SELECT p.product_id, p.product_name, p.cart_id, p.product_count," +
+                "p.product_info, p.product_total_price, p.active, p.imgURL, pr.product_price, pr.product_count as available_count " +
+                "FROM cart c, cart_product p, product pr WHERE c.cart_id = :cart_id " +
+                "AND p.cart_id = :cart_id AND pr.product_id = p.product_id ", namedParameters, new CartProductDetailMapper());
 
         String sql = "SELECT * FROM " + CART_TABLE + " WHERE cart_id = " + id + "";
         List<Cart> cartList = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Cart.class));
