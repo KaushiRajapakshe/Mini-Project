@@ -1,0 +1,158 @@
+/* Application Related issue Mini project UI css file */
+.main{
+  background-color: rgb(46, 46, 46);
+  width: 100%;
+  font-family: "Oswald", sans-serif;
+}
+.App {
+  width: 75vw;
+  align-content: center;
+  margin: auto;
+}
+.appbar {
+  background-color: rgb(46, 46, 46);
+}
+.toolbar{
+  background-image: linear-gradient(to bottom right, green, yellow);
+  flex: 1;
+  flex-direction: 'row';
+}
+.footer {
+  margin-top: 10vh;
+  padding-bottom: 15vh;
+  text-align: center;
+}
+.element1 {
+  display:inline-block;
+  margin-right:10px;
+  color: white;
+} 
+.element2 {
+  display:inline-block;
+  color: darkorange;
+} 
+.line {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-grow: 1;
+  width: 100%;
+  border-top: 1px solid #ffc500;
+}
+.box{
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap
+}
+.material-icons{
+  font-size: 2.4em;
+  cursor: pointer;
+}
+.category{
+  width: 300px;
+  background-color: white;
+  margin:50px;
+}
+.category .category-image .category-title{
+  font-weight: 400;
+  margin: 20px;
+}
+.category-content{
+  margin: 20px;
+}
+.category{
+  margin-top:40px;
+}
+.card{
+  width: 1300px;
+  background-color: white;
+  margin:50px;
+}
+.card .card-image {
+  font-weight: 400;
+  margin: 20px;
+}
+.cart{
+  margin-top:40px;
+}
+.collection .collection-item{
+  display: flex;
+}
+.collection-item.avatar .title {
+  font-size: 20px;
+  font-weight: 500;
+  color: #ee6e73;
+  display: block;
+  margin-bottom: 20px;
+  
+}
+.collection .collection-item img{
+  width: 150px;
+  margin-right: 25px;
+}
+.item-desc{
+  align-self:center;
+}
+.center{
+  text-align: center;
+  color: white;
+}
+.card-content{
+  margin: 20px;
+}
+.price-table{
+  margin-bottom: 150px;
+}
+.pricelits{
+  text-align: center;
+  color: white;
+}
+.discount-box {
+  display: flex;
+  flex-wrap: wrap;
+  color: white; 
+  padding: 15px;
+  text-align: left;
+  display: flex;
+  width: auto;
+  flex-direction: column;
+  align-content: space-around;
+}
+.item-desc{
+  align-self:center;
+}
+.cart-box{
+  background-color: honeydew;
+}
+.total-container{
+  background-color: lightseagreen;
+  width: auto;
+  color: white;
+  text-align: center;
+  margin-left: 75%;
+  padding: 10px;
+  margin-bottom: 30px;
+
+}
+.search{
+  display: flex;
+}
+.search-box {
+  height: 25px;
+  width: 700px;
+  margin-left: 10px;
+  border-radius: 5px;
+}
+.navButton{
+  text-align: 'right';
+  align-self: 'stretch';
+  color: 'black'
+}
+.cartIcon{
+  padding: '5px';
+  width: '30px';
+  height: 30px;
+}
+.abel-info{
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+}
